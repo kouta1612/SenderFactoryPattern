@@ -11,6 +11,6 @@ abstract class Factory
         return $product;
     }
 
-    abstract protected function createProduct(string $owner);
-    abstract protected function registerProduct($product);
+    protected abstract function createProduct(string $owner);
+    protected abstract function registerProduct($product);
 }
