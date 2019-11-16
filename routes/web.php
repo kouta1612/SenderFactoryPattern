@@ -15,4 +15,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/animal', 'AnimalController@voice');
+Route::get('/test', 'MainController@main');
