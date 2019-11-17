@@ -2,20 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\AccountFactory;
+use App\Company;
+use App\Job;
+use App\Services\SenderFactory;
+use App\User;
 
 class MainController extends Controller
 {
+    // ScheduleCommandの実装
     public function main()
     {
-        $factory = new AccountFactory();
-        $account1 = $factory->create("Ralph Johnson");
-        $account2 = $factory->create("Richard Helm");
-        $account3 = $factory->create("John Vlissides");
-        $account4 = $factory->create("Erich Gamma");
-        $account1->use();
-        $account2->use();
-        $account3->use();
-        $account4->use();
+        $entriedJobs = Job::all();
+        foreach ($entriedJobs as $entriedJob) {
+            // ① userにメール送信
+            $this->send(User::class, $entriedJob);
+            // ② companyにメールまたはAPIを送信
+            $this->send(Company::class, $entriedJob);
+        }
+    }
+
+    private function send($class, $entriedJob)
+    {
+        $sender = SenderFactory::create($class);
+        $sender->setParameter($entriedJob);
+        $sender->send();
     }
 }
